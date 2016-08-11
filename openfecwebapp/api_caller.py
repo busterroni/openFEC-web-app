@@ -119,8 +119,8 @@ def load_cmte_financials(committee_id, **filters):
     totals = _call_api('committee', committee_id, 'totals', **filters)
 
     return {
-        'reports': reports['results'],
-        'totals': totals['results'],
+        'reports': reports['results'] if 'results' in reports else [],
+        'totals': totals['results'] if 'results' in reports else [],
     }
 
 
@@ -129,7 +129,7 @@ def load_candidate_totals(candidate_id, cycle, election_full=True):
         'candidates', 'totals',
         candidate_id=candidate_id, cycle=cycle, election_full=election_full,
     )
-    if response['results']:
+    if 'results' in response and response['results']:
         return response['results'][0]
     return {}
 
@@ -162,7 +162,8 @@ def load_top_candidates(sort):
             'candidates', 'totals',
             sort_hide_null=True, election_year=2016, cycle=2016, election_full=False, sort=sort, per_page=5
         )
-        if response['results']:
+
+        if 'results' in response and response['results']:
             return response['results']
         return {}
 
@@ -171,7 +172,7 @@ def load_top_pacs(sort):
             'totals', 'pac',
             sort_hide_null=True, cycle=2016, sort=sort, per_page=5
         )
-        if response['results']:
+        if 'results' in response and response['results']:
             return response['results']
         return {}
 
@@ -180,6 +181,6 @@ def load_top_parties(sort):
             'totals', 'party',
             sort_hide_null=True, cycle=2016, sort=sort, per_page=5
         )
-        if response['results']:
+        if 'results' in response and response['results']:
             return response['results']
         return {}
